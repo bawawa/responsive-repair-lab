@@ -1,0 +1,7 @@
+# Public repository excludes private sales material and generated archives.
+/product/
+/demo/product/
+/platform-notes.md
+/registration-materials.md
+/responsive-repair-lab*.zip
+.DS_Store

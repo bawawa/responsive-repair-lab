@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="原创响应式界面修复演示：展示移动端横向溢出问题与修复后的状态。" />
+  <title>Responsive Repair Lab · 原创演示</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #172033;
+      --muted: #647089;
+      --soft: #f2f5f9;
+      --surface: #ffffff;
+      --line: #dfe5ee;
+      --line-strong: #cbd4e1;
+      --accent: #5b5bd6;
+      --accent-dark: #4446b4;
+      --accent-wash: #eeefff;
+      --danger: #bb3d4b;
+      --danger-wash: #fff0f1;
+      --success: #1f7b58;
+      --success-wash: #eaf8f1;
+      --shadow: 0 16px 48px rgba(22, 31, 55, .10), 0 2px 7px rgba(22, 31, 55, .05);
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+    }
+
+    * { box-sizing: border-box; }
+    html { min-width: 320px; background: #eef1f6; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 9% -10%, rgba(91, 91, 214, .11), transparent 34rem),
+        #eef1f6;
+      font: 400 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    button { font: inherit; }
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid rgba(91, 91, 214, .38);
+      outline-offset: 3px;
+    }
+
+    .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; padding: 28px 0 48px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 40px; }
+    .brand { display: flex; gap: 12px; align-items: center; }
+    .brand-mark { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; color: #fff; background: var(--accent); box-shadow: 0 8px 18px rgba(91, 91, 214, .25); font-weight: 700; }
+    .brand-copy strong { display: block; font-size: 15px; letter-spacing: .01em; }
+    .brand-copy span { display: block; color: var(--muted); font-size: 12px; }
+    .demo-label { display: inline-flex; align-items: center; gap: 7px; min-height: 30px; padding: 5px 10px; border: 1px solid #dddff9; border-radius: 999px; color: #5558bd; background: rgba(255,255,255,.64); font-size: 12px; font-weight: 600; }
+    .demo-label::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+    .hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr); gap: 32px; align-items: end; margin-bottom: 28px; }
+    .eyebrow { margin: 0 0 10px; color: var(--accent-dark); font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { max-width: 660px; margin: 0; font-size: clamp(32px, 5vw, 54px); line-height: 1.06; letter-spacing: -.045em; }
+    .hero p { max-width: 630px; margin: 18px 0 0; color: var(--muted); font-size: 17px; }
+    .hero-note { align-self: stretch; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius-md); background: rgba(255,255,255,.68); }
+    .hero-note strong { display: block; margin-bottom: 8px; font-size: 14px; }
+    .hero-note p { margin: 0; font-size: 13px; line-height: 1.65; }
+
+    .workspace { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr); gap: 20px; align-items: start; }
+    .panel { border: 1px solid var(--line); border-radius: var(--radius-lg); background: rgba(255,255,255,.88); box-shadow: var(--shadow); }
+    .preview-panel { min-width: 0; padding: 22px; }
+    .panel-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+    .panel-heading h2 { margin: 0; font-size: 18px; letter-spacing: -.02em; }
+    .panel-heading p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+    .segmented { display: inline-flex; padding: 4px; border: 1px solid var(--line); border-radius: 13px; background: var(--soft); }
+    .segmented button { min-height: 34px; padding: 6px 12px; border: 0; border-radius: 9px; color: var(--muted); background: transparent; cursor: pointer; font-size: 13px; font-weight: 600; }
+    .segmented button[aria-selected="true"] { color: var(--ink); background: var(--surface); box-shadow: 0 2px 7px rgba(22,31,55,.10); }
+    .segmented button:hover { color: var(--ink); }
+
+    .stage { display: grid; place-items: center; min-width: 0; min-height: 590px; padding: 24px; border: 1px solid #e6eaf1; border-radius: 18px; background: #f5f7fb; overflow: hidden; }
+    .device { width: 375px; max-width: 100%; min-width: 0; padding: 9px; border: 1px solid #c7cfdb; border-radius: 29px; background: #111827; box-shadow: 0 24px 44px rgba(29, 38, 59, .20); }
+    .device-notch { width: 108px; height: 21px; margin: 0 auto 4px; border-radius: 0 0 15px 15px; background: #111827; }
+    .phone-screen { position: relative; height: 548px; border-radius: 20px; background: #f9fafc; overflow-x: auto; overflow-y: hidden; scrollbar-color: #bcc6d5 transparent; scrollbar-width: thin; }
+    .screen-inner { min-height: 100%; padding: 20px 18px 24px; }
+    .screen-top { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 22px; color: #68748a; font-size: 12px; }
+    .screen-top strong { color: #232d40; font-size: 13px; }
+    .order-card { border: 1px solid #e4e8ef; border-radius: 16px; background: #fff; box-shadow: 0 5px 14px rgba(32,43,65,.05); }
+    .order-main { padding: 18px; }
+    .order-tag { display: inline-flex; margin-bottom: 12px; padding: 4px 8px; border-radius: 7px; color: #4d56a8; background: #eff0ff; font-size: 11px; font-weight: 700; }
+    .order-title { margin: 0; color: #182235; font-size: 17px; font-weight: 700; line-height: 1.35; }
+    .order-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; color: #6a7589; font-size: 12px; }
+    .price-row { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; margin-top: 20px; padding-top: 16px; border-top: 1px solid #eef0f4; }
+    .price-label { color: #6a7589; font-size: 13px; }
+    .price { color: #182235; font-size: 26px; font-weight: 750; letter-spacing: -.03em; white-space: nowrap; }
+    .price small { margin-right: 3px; font-size: 13px; font-weight: 600; }
+    .benefit-list { display: grid; gap: 10px; margin: 0; padding: 16px 18px 18px; border-top: 1px solid #eef0f4; list-style: none; }
+    .benefit-list li { display: flex; align-items: flex-start; gap: 8px; color: #556176; font-size: 12px; }
+    .benefit-list li::before { content: "✓"; display: grid; flex: 0 0 17px; place-items: center; width: 17px; height: 17px; border-radius: 50%; color: var(--success); background: var(--success-wash); font-size: 11px; font-weight: 800; }
+    .action-bar { display: flex; gap: 10px; margin-top: 20px; padding: 14px; border: 1px solid #e4e8ef; border-radius: 16px; background: #fff; }
+    .action-bar button { min-height: 44px; border-radius: 11px; cursor: pointer; font-size: 13px; font-weight: 700; }
+    .action-secondary { flex: 0 0 104px; border: 1px solid #d9e0ea; color: #445169; background: #fff; }
+    .action-primary { flex: 1 1 auto; border: 1px solid var(--accent); color: #fff; background: var(--accent); box-shadow: 0 6px 13px rgba(91,91,214,.22); }
+    .action-bar button:hover { transform: translateY(-1px); }
+    .action-bar button:active { transform: translateY(0); }
+    .phone-note { margin: 15px 2px 0; color: #7a8597; font-size: 11px; text-align: center; }
+
+    /* The broken state intentionally contains three common sources of mobile overflow. */
+    .phone-screen.is-before .screen-inner { min-width: 496px; }
+    .phone-screen.is-before .order-title { white-space: nowrap; }
+    .phone-screen.is-before .price-row { min-width: 460px; }
+    .phone-screen.is-before .action-bar { width: 440px; }
+    .phone-screen.is-before .phone-note { width: 440px; }
+
+    .phone-screen.is-after .screen-inner { min-width: 0; }
+    .phone-screen.is-after .order-title { overflow-wrap: anywhere; }
+    .phone-screen.is-after .price-row { min-width: 0; }
+    .phone-screen.is-after .action-bar { position: sticky; bottom: 12px; width: 100%; margin-inline: 0; padding-bottom: max(14px, env(safe-area-inset-bottom)); }
+    .phone-screen.is-after .phone-note { width: auto; }
+    .phone-screen.is-after .action-primary { min-width: 0; }
+
+    .diagnostic { display: grid; gap: 12px; margin-top: 18px; }
+    .status { display: flex; align-items: flex-start; gap: 11px; padding: 13px 14px; border-radius: 13px; font-size: 13px; }
+    .status::before { flex: 0 0 auto; font-size: 15px; line-height: 1.2; }
+    .status.is-danger { color: #7e2c39; background: var(--danger-wash); }
+    .status.is-danger::before { content: "!"; display: grid; place-items: center; width: 19px; height: 19px; border-radius: 50%; color: #fff; background: var(--danger); font-size: 12px; font-weight: 800; }
+    .status.is-success { color: #166343; background: var(--success-wash); }
+    .status.is-success::before { content: "✓"; display: grid; place-items: center; width: 19px; height: 19px; border-radius: 50%; color: #fff; background: var(--success); font-size: 12px; font-weight: 800; }
+    .status strong { display: block; margin-bottom: 2px; }
+    .status span { display: block; color: inherit; opacity: .82; font-size: 12px; }
+
+    .details-panel { padding: 22px; }
+    .details-panel h2 { margin: 0; font-size: 18px; }
+    .details-panel > p { margin: 6px 0 20px; color: var(--muted); font-size: 13px; }
+    .issue-list { display: grid; gap: 11px; margin: 0; padding: 0; list-style: none; }
+    .issue { display: grid; grid-template-columns: 31px 1fr; gap: 11px; padding: 13px; border: 1px solid var(--line); border-radius: 14px; background: #fbfcfe; }
+    .issue-num { display: grid; place-items: center; width: 31px; height: 31px; border-radius: 10px; color: #5558bd; background: var(--accent-wash); font-size: 12px; font-weight: 800; }
+    .issue h3 { margin: 1px 0 3px; font-size: 13px; }
+    .issue p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .checklist { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+    .checklist h3 { margin: 0 0 10px; font-size: 13px; }
+    .checklist ul { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+    .checklist li { display: flex; align-items: flex-start; gap: 8px; color: var(--muted); font-size: 12px; }
+    .checklist li::before { content: ""; flex: 0 0 7px; width: 7px; height: 7px; margin-top: 6px; border-radius: 50%; background: var(--accent); }
+    .note-box { margin-top: 20px; padding: 13px; border-radius: 12px; color: #59667b; background: #f4f6fa; font-size: 11px; line-height: 1.6; }
+    footer { margin-top: 22px; color: #7a8597; font-size: 12px; text-align: center; }
+
+    @media (max-width: 860px) {
+      .hero, .workspace { grid-template-columns: 1fr; }
+      .hero-note { max-width: 620px; }
+      .details-panel { order: -1; }
+    }
+    @media (max-width: 560px) {
+      .shell { width: min(100% - 24px, 1180px); padding-top: 18px; }
+      .topbar { align-items: flex-start; margin-bottom: 28px; }
+      .demo-label { max-width: 185px; text-align: right; }
+      .hero { gap: 18px; margin-bottom: 20px; }
+      h1 { font-size: 34px; }
+      .hero p { font-size: 15px; }
+      .preview-panel, .details-panel { padding: 16px; border-radius: 19px; }
+      .panel-heading { display: block; }
+      .segmented { margin-top: 14px; }
+      .stage { min-height: 576px; padding: 10px; }
+      .device { width: 375px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand" aria-label="Responsive Repair Lab">
+        <div class="brand-mark" aria-hidden="true">R</div>
+        <div class="brand-copy"><strong>Responsive Repair Lab</strong><span>原生 HTML · CSS · JS 演示</span></div>
+      </div>
+      <div class="demo-label">原创演示，不是真实客户案例</div>
+    </header>
+
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Mobile UI repair / 01</p>
+        <h1 id="page-title">把一个拥挤的订单页，修到手机上也能安心使用。</h1>
+        <p>同一份界面，切换查看修复前后的差异。演示聚焦三个常见问题：长标题、订单金额和底部操作栏造成的横向溢出。</p>
+      </div>
+      <aside class="hero-note" aria-label="演示说明">
+        <strong>这是一个可复用的修复示例</strong>
+        <p>保留原有信息层级，只调整尺寸约束、换行策略、按钮宽度与键盘焦点，让移动端真正可读、可点、可操作。</p>
+      </aside>
+    </section>
+
+    <section class="workspace" aria-label="响应式修复演示区域">
+      <div class="panel preview-panel">
+        <div class="panel-heading">
+          <div>
+            <h2>同一页面 · 两种状态</h2>
+            <p>预览固定为 375px 手机宽度，可滚动查看修复前的溢出。</p>
+          </div>
+          <div class="segmented" role="tablist" aria-label="选择界面状态">
+            <button id="before-tab" type="button" role="tab" aria-selected="true" aria-controls="phone-screen">修复前</button>
+            <button id="after-tab" type="button" role="tab" aria-selected="false" aria-controls="phone-screen">修复后</button>
+          </div>
+        </div>
+
+        <div class="stage">
+          <div class="device" aria-label="375 像素手机预览">
+            <div class="device-notch" aria-hidden="true"></div>
+            <div id="phone-screen" class="phone-screen is-before" role="tabpanel" aria-live="polite" tabindex="0">
+              <div class="screen-inner">
+                <div class="screen-top"><span>9:41</span><strong>订单确认</strong><span>● ● ●</span></div>
+                <article class="order-card">
+                  <div class="order-main">
+                    <span class="order-tag">限时专享</span>
+                    <h3 class="order-title">春季轻盈通勤双肩包 · 防泼水电脑隔层 · 14 英寸适用</h3>
+                    <div class="order-meta"><span>黑色 / 14 英寸</span><span>数量 × 1</span></div>
+                    <div class="price-row"><span class="price-label">应付金额</span><strong class="price"><small>¥</small>269.00</strong></div>
+                  </div>
+                  <ul class="benefit-list">
+                    <li>支持 7 天无理由退换</li>
+                    <li>预计明天送达，配送费 ¥0</li>
+                  </ul>
+                </article>
+                <div class="action-bar" aria-label="订单操作">
+                  <button class="action-secondary" type="button">返回修改</button>
+                  <button class="action-primary" type="button">提交并支付</button>
+                </div>
+                <p class="phone-note">支付即代表同意《服务条款》与《隐私说明》</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="diagnostic">
+          <div id="status" class="status is-danger">
+            <div><strong id="status-title">检测到 3 处横向溢出</strong><span id="status-copy">标题、价格行与底部按钮的最小宽度超过手机视口。</span></div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="panel details-panel" aria-labelledby="details-title">
+        <h2 id="details-title">修复清单</h2>
+        <p>每一步都对应响应式检查清单中的验收点。</p>
+        <ol class="issue-list">
+          <li class="issue"><span class="issue-num">01</span><div><h3>长标题正常换行</h3><p>移除强制不换行，允许中英文与数字在窄屏中断开。</p></div></li>
+          <li class="issue"><span class="issue-num">02</span><div><h3>金额行跟随容器</h3><p>价格保持完整，标签区域可收缩，避免固定最小宽度顶破卡片。</p></div></li>
+          <li class="issue"><span class="issue-num">03</span><div><h3>底部操作可触达</h3><p>按钮使用弹性布局与安全区间距，触控区域 ≥ 44px。</p></div></li>
+        </ol>
+        <div class="checklist">
+          <h3>修复后还会检查</h3>
+          <ul>
+            <li>键盘 Tab 顺序清楚，焦点环可见</li>
+            <li>不用颜色单独表达状态</li>
+            <li>宽屏与 375px 手机宽度都保持同一信息层级</li>
+          </ul>
+        </div>
+        <div class="note-box">演示完全离线运行，不收集任何数据，不使用外网图片，也不包含任何用户或雇主资产。</div>
+      </aside>
+    </section>
+
+    <footer>Responsive Repair Lab · 一个用于展示响应式修复方法的原创样例</footer>
+  </main>
+
+  <script>
+    (() => {
+      const screen = document.getElementById('phone-screen');
+      const beforeTab = document.getElementById('before-tab');
+      const afterTab = document.getElementById('after-tab');
+      const status = document.getElementById('status');
+      const title = document.getElementById('status-title');
+      const copy = document.getElementById('status-copy');
+      let currentState = 'before';
+
+      function setState(nextState) {
+        currentState = nextState;
+        const isBefore = nextState === 'before';
+        screen.classList.toggle('is-before', isBefore);
+        screen.classList.toggle('is-after', !isBefore);
+        beforeTab.setAttribute('aria-selected', String(isBefore));
+        afterTab.setAttribute('aria-selected', String(!isBefore));
+        status.classList.toggle('is-danger', isBefore);
+        status.classList.toggle('is-success', !isBefore);
+        if (isBefore) {
+          title.textContent = '检测到 3 处横向溢出';
+          copy.textContent = '标题、价格行与底部按钮的最小宽度超过手机视口。';
+        } else {
+          title.textContent = '修复完成：内容保持在手机视口内';
+          copy.textContent = '标题可换行，金额不被截断，按钮可见且键盘焦点清楚。';
+        }
+        screen.scrollLeft = 0;
+      }
+
+      beforeTab.addEventListener('click', () => setState('before'));
+      afterTab.addEventListener('click', () => setState('after'));
+      [beforeTab, afterTab].forEach((tab, index) => {
+        tab.addEventListener('keydown', (event) => {
+          if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+            event.preventDefault();
+            const next = index === 0 ? afterTab : beforeTab;
+            next.focus();
+            setState(next === beforeTab ? 'before' : 'after');
+          }
+        });
+      });
+
+      // Keep the state explicit for assistive tech and future automated checks.
+      screen.dataset.state = currentState;
+      const observer = new MutationObserver(() => { screen.dataset.state = currentState; });
+      observer.observe(screen, { attributes: true, attributeFilter: ['class'] });
+    })();
+  </script>
+</body>
+</html>
