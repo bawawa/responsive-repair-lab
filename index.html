@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Responsive Repair Lab：离线响应式界面演示与一次性自查资料包。">
+    <title>Responsive Repair Lab · 响应式界面自查包</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #172033;
+        --muted: #647089;
+        --surface: #ffffff;
+        --wash: #f3f6fb;
+        --line: #dfe5ee;
+        --accent: #4d5bd5;
+        --accent-dark: #3541a6;
+        --accent-wash: #eef0ff;
+        --shadow: 0 18px 48px rgb(22 31 55 / 11%);
+      }
+
+      * { box-sizing: border-box; }
+      html { min-width: 320px; background: var(--wash); }
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 8% -12%, rgb(93 105 214 / 18%), transparent 28rem),
+          var(--wash);
+        font: 400 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      }
+      a { color: var(--accent-dark); }
+      a:focus-visible, button:focus-visible { outline: 3px solid rgb(77 91 213 / 40%); outline-offset: 3px; }
+      .shell { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 28px 0 56px; }
+      .topbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 58px; }
+      .brand { display: flex; align-items: center; gap: 12px; font-weight: 750; letter-spacing: .01em; }
+      .mark { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; color: white; background: var(--accent); box-shadow: 0 8px 18px rgb(77 91 213 / 25%); }
+      .topbar a { font-size: 14px; font-weight: 650; text-decoration: none; }
+      .hero { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr); gap: 28px; align-items: stretch; margin-bottom: 28px; }
+      .hero-copy, .preview, .card { border: 1px solid var(--line); border-radius: 24px; background: rgb(255 255 255 / 88%); box-shadow: var(--shadow); }
+      .hero-copy { padding: clamp(28px, 6vw, 68px); }
+      .eyebrow { margin: 0 0 14px; color: var(--accent-dark); font-size: 12px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+      h1 { max-width: 680px; margin: 0; font-size: clamp(2.2rem, 6vw, 4.7rem); line-height: 1.06; letter-spacing: -.055em; }
+      .lead { max-width: 630px; margin: 22px 0 0; color: var(--muted); font-size: 18px; }
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+      .button { display: inline-flex; min-height: 46px; align-items: center; justify-content: center; padding: 0 18px; border-radius: 12px; font-weight: 700; text-decoration: none; }
+      .button.primary { color: white; background: var(--accent); }
+      .button.primary:hover { background: var(--accent-dark); }
+      .button.secondary { color: var(--ink); border: 1px solid var(--line); background: white; }
+      .preview { display: flex; flex-direction: column; justify-content: space-between; padding: 26px; background: var(--ink); color: white; }
+      .preview small { color: #b8c2d6; font-size: 13px; }
+      .preview h2 { margin: 10px 0 8px; font-size: 25px; line-height: 1.2; }
+      .preview p { margin: 0; color: #cdd5e4; }
+      .preview-link { display: inline-flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 28px; padding: 13px 15px; border: 1px solid #4b5873; border-radius: 13px; color: white; background: #222e47; text-decoration: none; }
+      .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin: 44px 0 16px; }
+      .section-heading h2 { margin: 0; font-size: 25px; letter-spacing: -.025em; }
+      .section-heading p { margin: 0; color: var(--muted); font-size: 14px; }
+      .tiers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+      .card { padding: 23px; box-shadow: 0 8px 24px rgb(22 31 55 / 5%); }
+      .card.featured { border-color: #aeb6f0; box-shadow: 0 12px 30px rgb(77 91 213 / 13%); }
+      .card h3 { margin: 0; font-size: 18px; }
+      .price { margin: 10px 0 12px; font-size: 30px; font-weight: 800; letter-spacing: -.04em; }
+      .price small { color: var(--muted); font-size: 13px; font-weight: 600; letter-spacing: 0; }
+      .card p { min-height: 52px; margin: 0; color: var(--muted); font-size: 14px; }
+      .card ul { margin: 19px 0 0; padding-left: 19px; color: var(--muted); font-size: 14px; }
+      .card li + li { margin-top: 7px; }
+      .note { margin-top: 28px; padding: 18px 20px; border: 1px solid #d8ddff; border-radius: 16px; color: #3c4785; background: var(--accent-wash); font-size: 14px; }
+      footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 42px; color: var(--muted); font-size: 13px; }
+      footer a { font-weight: 650; }
+      @media (max-width: 760px) {
+        .shell { width: min(100% - 28px, 620px); padding-top: 18px; }
+        .topbar { margin-bottom: 28px; }
+        .hero { grid-template-columns: 1fr; }
+        .hero-copy { padding: 30px 24px; }
+        .tiers { grid-template-columns: 1fr; }
+        .card p { min-height: auto; }
+        .section-heading { display: block; }
+        .section-heading p { margin-top: 6px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand"><span class="mark" aria-hidden="true">↔</span><span>Responsive Repair Lab</span></div>
+        <a href="https://github.com/bawawa/responsive-repair-lab/releases/tag/v1.0.0">公开版本说明 ↗</a>
+      </header>
+
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Responsive UI · Offline · Original</p>
+          <h1 id="hero-title">把手机端的溢出问题，变成可验收的修复步骤。</h1>
+          <p class="lead">一份离线演示和一次性自查资料，围绕长标题、价格行、底部操作栏与键盘焦点，帮助你在提交代码前快速找到布局根因。</p>
+          <div class="actions">
+            <a class="button primary" href="./demo/index.html">打开免费演示</a>
+            <a class="button secondary" href="./issues/new?template=purchase.md&amp;title=%E8%B4%AD%E4%B9%B0%20Responsive%20Repair%20Lab">登记购买版本</a>
+          </div>
+        </div>
+        <aside class="preview" aria-label="产品边界">
+          <div>
+            <small>适合谁</small>
+            <h2>正在维护 Web 或 Flutter 页面的人</h2>
+            <p>无需安装依赖，不加载外部图片，不上传项目代码。页面明确标注为原创演示，不是真实客户案例。</p>
+          </div>
+          <a class="preview-link" href="./demo/index.html"><span>查看修复前 / 修复后</span><span aria-hidden="true">→</span></a>
+        </aside>
+      </section>
+
+      <section aria-labelledby="tiers-title">
+        <div class="section-heading">
+          <h2 id="tiers-title">一次性资料包</h2>
+          <p>不包含定制开发、项目接单或后续答疑</p>
+        </div>
+        <div class="tiers">
+          <article class="card">
+            <h3>入门</h3>
+            <div class="price">¥29 <small>一次性</small></div>
+            <p>用最短路径检查常见小屏布局问题。</p>
+            <ul><li>响应式检查清单</li><li>可复制 CSS 片段</li></ul>
+          </article>
+          <article class="card featured">
+            <h3>标准</h3>
+            <div class="price">¥49 <small>一次性</small></div>
+            <p>在入门版基础上，配套演示和记录模板。</p>
+            <ul><li>入门版全部内容</li><li>离线演示包</li><li>适配记录模板</li></ul>
+          </article>
+          <article class="card">
+            <h3>完整</h3>
+            <div class="price">¥99 <small>一次性</small></div>
+            <p>适合想保存方法、文案和授权边界的人。</p>
+            <ul><li>标准版全部内容</li><li>阅读稿和商品文案</li><li>授权说明</li></ul>
+          </article>
+        </div>
+        <p class="note">购买前请先发邮件至 <a href="mailto:kobesmi@gmail.com">kobesmi@gmail.com</a> 确认版本和交付方式。请不要通过 Issue 或邮件发送密码、验证码、付款码或其他个人资料。</p>
+      </section>
+
+      <footer>
+        <span>© Responsive Repair Lab · 原创离线演示</span>
+        <span><a href="https://github.com/bawawa/responsive-repair-lab">GitHub 仓库</a> · <a href="mailto:kobesmi@gmail.com">购买咨询</a></span>
+      </footer>
+    </main>
+  </body>
+</html>
