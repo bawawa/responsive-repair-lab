@@ -171,6 +171,30 @@
         <p class="note">购买前请先发邮件至 <a href="mailto:kobesmi@gmail.com">kobesmi@gmail.com</a> 确认版本和交付方式。请不要通过 Issue 或邮件发送密码、验证码、付款码或其他个人资料。</p>
       </section>
 
+      <section aria-labelledby="notes-title">
+        <div class="section-heading">
+          <h2 id="notes-title">公开排查笔记</h2>
+          <p>先读方法，再决定是否需要资料包</p>
+        </div>
+        <div class="faq-grid" aria-labelledby="notes-title">
+          <article class="faq-item" id="notes-overflow">
+            <h3>手机端横向滚动，先查这 6 个地方</h3>
+            <p>从 375px 的复现记录开始，依次检查撑宽元素、长文本、图片、表格、固定按钮和键盘焦点。</p>
+            <p><a href="https://gist.github.com/bawawa/b6840dbce5a77a8904ae4c4dd05a41db">阅读免费检查清单 ↗</a></p>
+          </article>
+          <article class="faq-item" id="notes-pack">
+            <h3>资料包怎么选？29 / 49 / 99 元</h3>
+            <p>入门版适合快速自查，标准版增加离线演示和记录模板，完整版再提供阅读稿、文案与授权说明。</p>
+            <p><a href="mailto:kobesmi@gmail.com">邮件确认版本 ↗</a></p>
+          </article>
+          <article class="faq-item" id="notes-flex">
+            <h3>Flex 子项文字撑屏，先试 <code>min-width: 0</code></h3>
+            <p>允许收缩的 Flex 子项需要显式设为 <code>min-width: 0</code>；需要横向滚动的区域则保留明确的固定宽度。</p>
+            <p><a href="./demo/index.html">查看修复前 / 修复后 ↗</a></p>
+          </article>
+        </div>
+      </section>
+
       <section aria-labelledby="faq-title">
         <div class="section-heading">
           <h2 id="faq-title">常见问题</h2>
