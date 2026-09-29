@@ -10,11 +10,11 @@
 
 ## 公开笔记
 
-- [手机端横向滚动，先查这 6 个地方](https://www.xiaohongshu.com/explore/6abbac3d0000000014000e77)
-- [响应式排查资料包怎么选？29 / 49 / 99 元](https://www.xiaohongshu.com/explore/6abbb4810000000014000106)
-- [Flex 撑屏先试 `min-width:0`](https://www.xiaohongshu.com/explore/6abbb8f90000000014001c10)
+- [手机端横向滚动，先查这 6 个地方（公开摘要）](https://bawawa.github.io/responsive-repair-lab/#notes-overflow)
+- [响应式排查资料包怎么选？29 / 49 / 99 元（公开摘要）](https://bawawa.github.io/responsive-repair-lab/#notes-pack)
+- [Flex 撑屏先试 `min-width:0`（公开摘要）](https://bawawa.github.io/responsive-repair-lab/#notes-flex)
 
-这些链接只指向公开笔记详情页；购买仍请先通过邮箱确认版本和交付范围。
+小红书已发布同主题笔记；仓库同时提供相关排查摘要，便于直接阅读。购买仍请先通过邮箱确认版本和交付范围。
 
 ## 购买咨询
 
