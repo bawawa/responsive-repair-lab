@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bawawa.github.io/responsive-repair-lab/sitemap.xml

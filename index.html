@@ -10,6 +10,29 @@
     <meta property="og:description" content="离线响应式 UI 演示与一次性自查资料，覆盖小屏溢出、价格行、底部操作栏和键盘焦点。">
     <meta property="og:url" content="https://bawawa.github.io/responsive-repair-lab/">
     <meta name="twitter:card" content="summary">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "资料包适合什么问题？",
+            "acceptedAnswer": { "@type": "Answer", "text": "它围绕手机宽度下的横向溢出、长标题、价格行、底部操作栏和键盘焦点，提供离线演示、检查清单和可复制片段。" }
+          },
+          {
+            "@type": "Question",
+            "name": "资料包包含定制开发吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "不包含定制开发、项目接单或后续答疑，是一次性数字资料。" }
+          },
+          {
+            "@type": "Question",
+            "name": "演示是真实客户案例吗？",
+            "acceptedAnswer": { "@type": "Answer", "text": "不是。页面是原创、离线可运行的演示，不含客户或公司内部代码。" }
+          }
+        ]
+      }
+    </script>
     <title>Responsive Repair Lab · 响应式界面自查包</title>
     <style>
       :root {
@@ -71,6 +94,10 @@
       .card ul { margin: 19px 0 0; padding-left: 19px; color: var(--muted); font-size: 14px; }
       .card li + li { margin-top: 7px; }
       .note { margin-top: 28px; padding: 18px 20px; border: 1px solid #d8ddff; border-radius: 16px; color: #3c4785; background: var(--accent-wash); font-size: 14px; }
+      .faq-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+      .faq-item { padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: rgb(255 255 255 / 72%); }
+      .faq-item h3 { margin: 0 0 8px; font-size: 15px; }
+      .faq-item p { margin: 0; color: var(--muted); font-size: 14px; }
       footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 42px; color: var(--muted); font-size: 13px; }
       footer a { font-weight: 650; }
       @media (max-width: 760px) {
@@ -79,6 +106,7 @@
         .hero { grid-template-columns: 1fr; }
         .hero-copy { padding: 30px 24px; }
         .tiers { grid-template-columns: 1fr; }
+        .faq-grid { grid-template-columns: 1fr; }
         .card p { min-height: auto; }
         .section-heading { display: block; }
         .section-heading p { margin-top: 6px; }
@@ -138,6 +166,27 @@
           </article>
         </div>
         <p class="note">购买前请先发邮件至 <a href="mailto:kobesmi@gmail.com">kobesmi@gmail.com</a> 确认版本和交付方式。请不要通过 Issue 或邮件发送密码、验证码、付款码或其他个人资料。</p>
+      </section>
+
+      <section aria-labelledby="faq-title">
+        <div class="section-heading">
+          <h2 id="faq-title">常见问题</h2>
+          <p>先确认资料边界，再决定是否购买</p>
+        </div>
+        <div class="faq-grid">
+          <article class="faq-item">
+            <h3>它适合什么问题？</h3>
+            <p>围绕手机宽度下的横向溢出、长标题、价格行、底部操作栏和键盘焦点，提供演示、清单和片段。</p>
+          </article>
+          <article class="faq-item">
+            <h3>包含定制开发吗？</h3>
+            <p>不包含定制开发、项目接单或后续答疑，是一次性数字资料。</p>
+          </article>
+          <article class="faq-item">
+            <h3>演示是真实客户案例吗？</h3>
+            <p>不是。页面是原创、离线可运行的演示，不含客户或公司内部代码。</p>
+          </article>
+        </div>
       </section>
 
       <footer>
